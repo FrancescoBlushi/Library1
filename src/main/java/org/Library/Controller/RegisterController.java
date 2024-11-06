@@ -9,27 +9,34 @@ import org.Library.models.Utente;
 
 public class RegisterController {
 
+    private Users users;
+    private Utente utente;
+    private UtenteDao utenteDao;
+    private UserDao userDao;
+    private Admin admin;
+    private AdminDao adminDao;
+
     public RegisterController() {}
 
     public void registerUser(String cartId,String nome,String cognome,String username,String password){
-        Users users = new Users(cartId, nome, cognome);
-        Utente utente = new Utente(username, password, users);
+        users = new Users(cartId, nome, cognome);
+        utente = new Utente(username, password, users);
 
-        UserDao userDao = new UserDao();
-        UtenteDao utenteDao1 = new UtenteDao();
+        userDao = new UserDao();
+        utenteDao = new UtenteDao();
         userDao.addUser(users);
-        utenteDao1.addUtente(utente);
+        utenteDao.addUtente(utente);
 
     }
 
     public void registerAdmin(String cartId,String nome,String cognome,String username,String password,String idBiblioteca){
-        Users users = new Users(cartId, nome, cognome);
-        Admin admin = new Admin(idBiblioteca, username, password, users);
+        users = new Users(cartId, nome, cognome);
+        admin = new Admin(idBiblioteca, username, password, users);
 
-        UserDao userDao = new UserDao();
+        userDao = new UserDao();
         userDao.addUser(users);
 
-        AdminDao adminDao = new AdminDao();
+        adminDao = new AdminDao();
         adminDao.addAdmin(admin);
     }
 }

@@ -58,6 +58,9 @@ public class LoansDao {
     }
 
     public boolean findLoanbyIsbn(String isbn) {
+        if(!isManaged){
+            this.em=ConnectionDB.getInstance().getEntity();
+        }
         try {
             Query query = em.createQuery("SELECT l FROM Loans l WHERE l.book.isbn = :isbn");
             query.setParameter("isbn", isbn);

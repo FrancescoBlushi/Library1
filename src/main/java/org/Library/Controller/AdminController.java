@@ -11,24 +11,32 @@ import org.Library.DaoModels.UserDao;
 import org.Library.DaoModels.UtenteDao;
 import org.Library.JavaFX.MessageView;
 import org.Library.models.Books;
+import org.Library.models.Loans;
 import org.Library.models.Users;
 import org.Library.models.Utente;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class AdminController {
 
+    private BookDao bookDao;
+    private Books book;
+    private UserDao userDao;;
+    private UtenteDao utenteDao;
+    private LoansDao loansDao;
+    private List<Users> users;
+
+
     public AdminController () {}
 
     public void addBookController(TextField isbnText, TextField titoloText, Label messaggioLabel2) {
-        BookDao bookDao1 = new BookDao();
+        bookDao = new BookDao();
         String isbn = isbnText.getText();
         String titolo = titoloText.getText();
-        Boolean trova = bookDao1.findBookBooleanIsbn(isbn);
+        Boolean trova = bookDao.findBookBooleanIsbn(isbn);
         if(!isbn.isEmpty() && trova) {
             System.out.println("Libro trovato");
-            BookDao bookDao = new BookDao();
+            bookDao = new BookDao();
             bookDao.removeBook(isbn);
             MessageView.mostraMessaggio(messaggioLabel2, "Libro con titolo : " + titolo + "eliminato con successo", "-fx-text-fill: #26ff00; -fx-font-scale: white");
 
@@ -56,8 +64,8 @@ public class AdminController {
         }
         if(!isbn.isEmpty() && !titolo.isEmpty() && !genero.isEmpty() && !lingua.isEmpty()
                 && !edizione.isEmpty() && !disponibili.isEmpty()) {
-            Books book = new Books(isbn,titolo,autore,genero,lingua,numero,edizione);
-            BookDao bookDao = new BookDao();
+            book = new Books(isbn,titolo,autore,genero,lingua,numero,edizione);
+            bookDao = new BookDao();
             bookDao.addBook(book);
             MessageView.mostraMessaggio(messaggioLabel,"Libro aggiunto correttamente","-fx-text-fill: #ff1500; -fx-font-scale: white");
         }else
@@ -66,10 +74,8 @@ public class AdminController {
 
     public void clientSearch(String searchTerm, TableView<Users> tableView) {
 
-        UtenteDao utenteDao = new UtenteDao();
-        UserDao userDao = new UserDao();
-
-        List<Users> users;
+        utenteDao = new UtenteDao();
+        userDao = new UserDao();
 
         if (searchTerm == null || searchTerm.trim().isEmpty()) {
             List<Utente> utenti = utenteDao.findAllUtenti();
@@ -93,10 +99,10 @@ public class AdminController {
 
     public void eliminaUtenteController(TextField eliminaField,Label messaggio){
         String cartID = eliminaField.getText().trim();
-        UserDao userDao = new UserDao();
+        userDao = new UserDao();
         boolean trova =userDao.findUser(cartID);
         if(trova){
-            LoansDao loansDao = new LoansDao();
+            loansDao = new LoansDao();
             loansDao.removeUserAndAssociations(cartID);
             MessageView.mostraMessaggio(messaggio,"Utente eliminato correttamente","-fx-text-fill: #26ff00; -fx-font-scale: white");
         }else{

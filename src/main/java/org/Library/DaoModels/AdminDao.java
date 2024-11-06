@@ -22,6 +22,9 @@ public class AdminDao {
     }
 
     public void addAdmin(Admin admin) {
+        if(!isManaged){
+            this.em = ConnectionDB.getInstance().getEntity();
+        }
         try {
             em.getTransaction().begin();
             em.persist(admin);

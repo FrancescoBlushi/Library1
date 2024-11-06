@@ -8,6 +8,9 @@ import org.Library.JavaFX.MessageView;
 
 public class PasswordController {
 
+    private UtenteDao utenteDao;
+    private UserDao userDao;
+
     public PasswordController() {}
 
     public void newPassword(TextField registerField, TextField registerField1, TextField registerField2, TextField registerField3, TextField registerField4, Label messageLabel) {
@@ -17,8 +20,8 @@ public class PasswordController {
         String username = registerField3.getText();
         String password = registerField4.getText();
 
-        UtenteDao utenteDao = new UtenteDao();
-        UserDao userDao = new UserDao();
+        utenteDao = new UtenteDao();
+        userDao = new UserDao();
 
         if (!cartId.isEmpty() && !nome.isEmpty() && !cognome.isEmpty() && !username.isEmpty() && !password.isEmpty() && userDao.controllUser(cartId,nome,cognome)) {
             utenteDao.updatePassword(username,password);
