@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
+    <persistence-unit name="Library" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <!-- Specifica l'entità da gestire con JPA -->
+        <class>org.Library.models.Users</class>
+        <class>org.Library.models.Books</class>
+        <class>org.Library.models.Loans</class>
+        <class>org.Library.models.Admin</class>
+        <class>org.Library.models.Utente</class>
+
+
+
+        <properties>
+            <!-- Configurazione del database -->
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/LibraryDB"/>
+            <property name="javax.persistence.jdbc.user" value="postgres"/>
+            <property name="javax.persistence.jdbc.password" value="F12071991"/>
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+
+
+
+            <!-- Configurazione di Hibernate -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL10Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/> <!-- Valori possibili: update, create, create-drop, validate -->
+            <property name="hibernate.show_sql" value="true"/> <!-- Mostra le query SQL nella console -->
+        </properties>
+    </persistence-unit>
+</persistence>
