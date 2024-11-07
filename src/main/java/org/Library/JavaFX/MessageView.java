@@ -13,9 +13,9 @@ public class MessageView {
 
 
         PauseTransition pause = new PauseTransition(Duration.seconds(5));
-        pause.setOnFinished(event -> messageLabel.setText(""));  // Cancella il testo dopo la pausa
+        pause.setOnFinished(event -> messageLabel.setText(""));
 
-        // Avvia la transizione
+
         pause.play();
     }
 

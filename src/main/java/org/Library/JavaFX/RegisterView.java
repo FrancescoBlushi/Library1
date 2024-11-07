@@ -13,6 +13,12 @@ import javafx.scene.layout.HBox;
 public class RegisterView {
 
     private Stage stage;
+    private Scene scene;
+    private Scene scene2;
+    UserDao userDao;
+    UtenteDao utenteDao;
+    RegisterController registerController;
+    AdminDao adminDao;
 
     public RegisterView(Stage stage) {
         this.stage = stage;
@@ -87,17 +93,17 @@ public class RegisterView {
             String idBiblioteca = biblotecaTextField.getText().trim();
 
             if (!cartId.isEmpty() && !nome.isEmpty() && !cognome.isEmpty() && !username.isEmpty() && !password.isEmpty()) {
-                UserDao userDao1 = new UserDao();
-                boolean find = userDao1.findUser(cartId);
+                userDao = new UserDao();
+                boolean find = userDao.findUser(cartId);
 
                 if (find) {
                     MessageView.mostraMessaggio(messageLabel, "Card Id esistente", "-fx-font-size: 14; -fx-background-color: #a63845; -fx-text-fill: white;");
                     return;
                 }
-                RegisterController registerController = new RegisterController();
+                registerController = new RegisterController();
 
                 if (userRadioButton.isSelected()) {
-                    UtenteDao utenteDao = new UtenteDao();
+                    utenteDao = new UtenteDao();
                     if (utenteDao.utenteEsistente(username)) {
                         MessageView.mostraMessaggio(messageLabel, "UserName esistente", "-fx-font-size: 14; -fx-background-color: #a63845; -fx-text-fill: white;");
                         return;
@@ -106,8 +112,8 @@ public class RegisterView {
                     registerController.registerUser(cartId,nome,cognome,username,password);
 
                 } else if (adminRadioButton.isSelected()) {
-                    AdminDao adminDao1 = new AdminDao();
-                    if (adminDao1.usernameEsiste(username)) {
+                     adminDao = new AdminDao();
+                    if (adminDao.usernameEsiste(username)) {
                         MessageView.mostraMessaggio(messageLabel, "UserName esistente", "-fx-font-size: 14; -fx-background-color: #a63845; -fx-text-fill: white;");
                         return;
                     }
@@ -136,12 +142,12 @@ public class RegisterView {
                 bottonBox, messageLabel
         );
 
-        Scene scene = stage.getScene();
+        scene = stage.getScene();
         indietroButton.setOnAction(event1 -> stage.setScene(scene));
 
-        Scene scena = new Scene(vbox,1400,600);
+        scene2 = new Scene(vbox,1400,600);
 
-        return scena;
+        return scene2;
     }
 
 

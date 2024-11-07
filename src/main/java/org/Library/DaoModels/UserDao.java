@@ -1,13 +1,10 @@
 package org.Library.DaoModels;
 import org.Library.models.Admin;
 import org.Library.models.Users;
-
-import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 public class UserDao {
 

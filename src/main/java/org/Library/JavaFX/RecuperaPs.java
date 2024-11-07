@@ -22,9 +22,8 @@ public class RecuperaPs {
 
     private Scene registerScene;
     private Stage stage;
+    private PasswordController passwordController;
 
-    private UserDao userDao = new UserDao();
-    private UtenteDao utenteDao = new UtenteDao();
 
     public RecuperaPs(Stage loginScene) {
             this.stage = loginScene;
@@ -83,7 +82,7 @@ public class RecuperaPs {
             );
 
             confermaButton.setOnAction((event) -> {
-                PasswordController passwordController = new PasswordController();
+               passwordController = new PasswordController();
                 passwordController.newPassword(registerField,registerField1,registerField2,registerField3,registerField4,messageLabel);
 
             });

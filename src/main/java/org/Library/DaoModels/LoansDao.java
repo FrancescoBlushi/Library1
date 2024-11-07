@@ -1,7 +1,6 @@
 package org.Library.DaoModels;
 import org.Library.Dto.LoanBook;
 import org.Library.models.*;
-import org.Library.Dto.LoanBook;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;

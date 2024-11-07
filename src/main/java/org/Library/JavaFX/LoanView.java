@@ -38,7 +38,10 @@ public class LoanView {
 
     private Stage stage;
     private Scene loginScene;
-    private UserDao userDao = new UserDao();
+    private UserDao userDao ;
+    private LoansDao loansDao;
+    private List<LoanBook> loansList;
+    TableView<LoanBook> tableView;
 
    /* public TableView<Loans> loansTView(String cart) {
 
@@ -82,8 +85,8 @@ public class LoanView {
     }*/
     public TableView<LoanBook> loansTView1(String cart) {
 
-        LoansDao loansDao = new LoansDao();
-        TableView<LoanBook> tableView = new TableView<>();
+        loansDao = new LoansDao();
+        tableView = new TableView<>();
 
         TableColumn<LoanBook, LocalDate> loanDate = new TableColumn<>("LOAN DATE");
         loanDate.setMinWidth(150);
@@ -116,7 +119,7 @@ public class LoanView {
 
         tableView.getColumns().addAll(cartId, isbn,title,autore, loanDate, dueDate, returnDate);
 
-        List<LoanBook> loansList = loansDao.getLibriLoan(cart);
+        loansList = loansDao.getLibriLoan(cart);
 
         ObservableList<LoanBook> observableList = FXCollections.observableArrayList(loansList);
         tableView.setItems(observableList);
@@ -138,6 +141,7 @@ public class LoanView {
         Label cronologia = new Label("Tutti i libri in prestito");
         cronologia.setStyle("-fx-font-weight: bold;");
 
+        userDao = new UserDao();
         Users user = userDao.findUserByCartId(id);
         Label name = new Label(user.getName());
         name.setStyle("-fx-font-weight: bold;");

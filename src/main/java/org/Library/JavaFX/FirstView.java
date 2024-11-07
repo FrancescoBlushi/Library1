@@ -24,7 +24,12 @@ import java.util.List;
 public class FirstView {
 
 
-    Stage stage;
+    private Stage stage;
+    private RecuperaPs recuperaPs;
+    private RegisterView registerView;
+    private BookDao bookDao;
+    private List<Books> allBooksList;
+    private AccessController accessController;
 
     public FirstView( Stage stage ) {
 
@@ -57,14 +62,14 @@ public class FirstView {
         stage.show();
 
 
-        RecuperaPs recuperaPs = new RecuperaPs(stage);
+        recuperaPs = new RecuperaPs(stage);
         Button recuperaButton = (Button) loginScene.lookup("#recuperaButton");
         recuperaButton.setOnAction(event -> {
             Scene recuperScena = recuperaPs.createRecuperoScene();
             stage.setScene(recuperScena);
         });
 
-        RegisterView registerView = new RegisterView(stage);
+        registerView = new RegisterView(stage);
 
         // Imposta il bottone di registrazione per mostrare la pagina di registrazione
         Button registerButton = (Button) loginScene.lookup("#registerButton");
@@ -110,8 +115,8 @@ public class FirstView {
 
         tableView.getColumns().addAll(isbnColumn, titleColumn,authorColumn, genreColumn, linguaColumn, disponibiliColumn);
 
-        BookDao bookDao = new BookDao();
-        List<Books> allBooksList = bookDao.getBooks();
+        bookDao = new BookDao();
+        allBooksList = bookDao.getBooks();
         ObservableList<Books> allBooksObservableList = FXCollections.observableArrayList(allBooksList);
         tableView.setItems(allBooksObservableList);
         return tableView;
@@ -178,7 +183,7 @@ public class FirstView {
 
         //Log in Button con azioni diversi Per Admin e User.
         loginButton.setOnAction(event -> {
-            AccessController accessController = new AccessController();
+            accessController = new AccessController();
             //User Log in
             if(rbUser.isSelected()) {
                 accessController.accessUser(usernameField,passwordField,messaglabel,stage);

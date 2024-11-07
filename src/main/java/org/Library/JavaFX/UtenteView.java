@@ -25,6 +25,11 @@ import java.time.LocalDate;
 public class UtenteView {
 
     private Stage primaryStage;
+    private FirstView firstView;
+    private TableView<Books> tableView;
+    private UtenteDao utenteDao;
+    private Users users;
+    private UtenteController utenteController;
 
     public UtenteView(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -34,8 +39,8 @@ public class UtenteView {
     public Scene createStage(String username, String cartId) {
 
         // Layout centrale per visualizzare i libri
-        FirstView firstView = new FirstView();
-        TableView<Books> tableView = firstView.createBooksTableView();
+        firstView = new FirstView();
+        tableView = firstView.createBooksTableView();
 
         // Creazione del layout per la ricerca dei libri, in mezzo alla scena
         VBox searchPane = createSearchPane(tableView, cartId);
@@ -58,8 +63,8 @@ public class UtenteView {
     }
 
     public VBox createVbox(String username) {
-        UtenteDao utenteDao = new UtenteDao();
-        Users users = utenteDao.usersCall(username);
+        utenteDao = new UtenteDao();
+        users = utenteDao.usersCall(username);
         String name = users.getName();
         String lastname = users.getLastname();
         String cartId = users.getCartId();
@@ -149,7 +154,7 @@ public class UtenteView {
             String Field = searchField.getText();
             LocalDate currentDate = LocalDate.now();
             LocalDate duelDate = currentDate.plusMonths(durataScelta[0]);
-            UtenteController utenteController = new UtenteController();
+            utenteController = new UtenteController();
             utenteController.prendiPrestito(Field, cartId, currentDate, duelDate,messageLabel);
 
         });
@@ -161,7 +166,7 @@ public class UtenteView {
 
         restituisciButton.setOnAction(event -> {
             String isbn = restituisciField.getText().trim();
-            UtenteController utenteController = new UtenteController();
+            utenteController = new UtenteController();
 
             Boolean find = utenteController.restituisciLibro(isbn, cartId);
             if(find) {

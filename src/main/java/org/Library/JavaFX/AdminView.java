@@ -24,6 +24,7 @@ public class AdminView {
     private Stage stage;
     private String username;
     private Scene scena;
+    private AdminController adminController;
 
 
     public AdminView(Stage stage,String username) {
@@ -133,7 +134,7 @@ public class AdminView {
 
         Button eliminaLibro = new Button("Elimina Libro");
 
-        AdminController adminController = new AdminController();
+        adminController = new AdminController();
         Label messaggioLabel = new Label();
 
         eliminaLibro.setOnAction(event -> {
@@ -201,7 +202,7 @@ public class AdminView {
 
         Button search = new Button("Search");
 
-        AdminController adminController = new AdminController();
+        adminController = new AdminController();
 
         search.setOnAction(event3 ->{
             String searchText = searchField.getText().trim();
