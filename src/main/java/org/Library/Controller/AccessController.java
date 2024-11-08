@@ -58,7 +58,7 @@ public class AccessController {
         if (!username.isEmpty() && !passowrd.isEmpty()) {
             boolean trova = adminDao.doesUtenteExist(username, passowrd);
             if (trova) {
-                adminView = new AdminView(stage,username);
+                adminView = new AdminView(stage,username,new AdminController());
                 adminView.mainLayout();
             }else {
                 MessageView.mostraMessaggio(messaglabel, "Utente non trovato", "-fx-font-weight: bold;");

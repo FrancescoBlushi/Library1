@@ -36,18 +36,6 @@ public class UtenteDao {
     }
 
 
-    public void removeUtente(Utente utente) {
-        try{
-            em.getTransaction().begin();
-            em.remove(em.merge(utente));
-            em.getTransaction().commit();
-        }finally {
-            if (!isManaged) {
-                em.close();
-            }
-        }
-    }
-
     public Utente findUtenteUsername(String username, String password) {
         try {
             Query query = em.createQuery("SELECT u FROM Utente u WHERE u.username = :username AND u.password = :password");

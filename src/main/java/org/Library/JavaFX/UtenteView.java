@@ -15,7 +15,6 @@ import org.Library.Controller.UtenteController;
 import org.Library.DaoModels.*;
 import org.Library.Main;
 import org.Library.models.Books;
-import org.Library.models.Loans;
 import org.Library.models.Users;
 
 import java.time.LocalDate;
@@ -143,7 +142,7 @@ public class UtenteView {
         //Search Button Action
         searchButton.setOnAction(event -> {
             String search = searchField.getText().trim();
-            FirstView.booksView(search, tableView);
+            FirstView.booksViewSearch(search, tableView);
 
         });
 

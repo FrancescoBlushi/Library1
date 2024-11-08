@@ -111,22 +111,6 @@ public class BookDao {
     }
 
 
-    public void removeBooksByTitle(String title) {
-        if (!isManaged) {               // Apertura del collegamento
-            em = ConnectionDB.getInstance().getEntity();
-        }
-        try {
-            em.getTransaction().begin();
-            Query query = em.createQuery("DELETE FROM Books b WHERE b.title = :title");
-            query.setParameter("title", title);
-            query.executeUpdate();
-            em.getTransaction().commit();
-        } finally {
-            if (!isManaged) {
-                em.close();
-            }
-        }
-    }
 
     public ObservableList<Books> getBooks() {
         if (!isManaged ) {               // Apertura del collegamento

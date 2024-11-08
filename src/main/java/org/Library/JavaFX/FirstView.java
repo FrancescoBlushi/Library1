@@ -12,16 +12,15 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.Library.Controller.AccessController;
-import org.Library.DaoModels.AdminDao;
+import org.Library.Controller.AdminController;
+import org.Library.Controller.PasswordController;
 import org.Library.DaoModels.BookDao;
-import org.Library.DaoModels.UtenteDao;
+import org.Library.Pattern.Observer;
 import org.Library.models.Books;
-import org.Library.models.Users;
-import org.Library.models.Utente;
 
 import java.util.List;
 
-public class FirstView {
+public class FirstView implements Observer {
 
 
     private Stage stage;
@@ -30,9 +29,12 @@ public class FirstView {
     private BookDao bookDao;
     private List<Books> allBooksList;
     private AccessController accessController;
+    private TableView<Books> tableView;
+    private AdminController adminController;
 
-    public FirstView( Stage stage ) {
-
+    public FirstView( Stage stage,AdminController adminController ) {
+        this.adminController = adminController;
+        this.adminController.addObserver(this);
         this.stage = stage;
 
     }
@@ -44,7 +46,7 @@ public class FirstView {
         VBox creaLogin = createLogin();
 
         // Layout centrale per visualizzare i libri
-        TableView<Books> tableView = createBooksTableView();
+        tableView = createBooksTableView();
 
         // Creazione del layout per la ricerca dei libri
         VBox searchPane = createSearchPane(tableView);
@@ -87,7 +89,7 @@ public class FirstView {
 
     //Crea la tabella centrale per visualizzare tutti i libri
     public TableView<Books> createBooksTableView() {
-        TableView<Books> tableView = new TableView<>();
+        tableView = new TableView<>();
 
         TableColumn<Books, String> isbnColumn = new TableColumn<>("ISBN");
         isbnColumn.setMinWidth(150);
@@ -115,15 +117,12 @@ public class FirstView {
 
         tableView.getColumns().addAll(isbnColumn, titleColumn,authorColumn, genreColumn, linguaColumn, disponibiliColumn);
 
-        bookDao = new BookDao();
-        allBooksList = bookDao.getBooks();
-        ObservableList<Books> allBooksObservableList = FXCollections.observableArrayList(allBooksList);
-        tableView.setItems(allBooksObservableList);
+        update();
         return tableView;
     }
 
     // Metodo che permette la ricerca chiama altri metodi di BookDao.
-    public static void booksView(String searchTerm, TableView<Books> tableView) {
+    public static void booksViewSearch(String searchTerm, TableView<Books> tableView) {
 
         BookDao bookDao = new BookDao();
         List<Books> booksList;
@@ -214,13 +213,22 @@ public class FirstView {
 
         searchButton.setOnAction(event -> {
             String search = searchField.getText().trim();
-                booksView(search,tableView);
+                booksViewSearch(search,tableView);
 
         });
 
         searchPane.getChildren().addAll(searchLabel, searchField,searchButton);
 
         return searchPane;
+    }
+
+    @Override
+    public void update() {
+        bookDao = new BookDao();
+        allBooksList = bookDao.getBooks();
+        ObservableList<Books> allBooksObservableList = FXCollections.observableArrayList(allBooksList);
+        tableView.setItems(allBooksObservableList);
+
     }
 
 

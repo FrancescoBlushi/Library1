@@ -35,46 +35,11 @@ public class UserDao {
         }
     }
 
-    public void removeUserByCartId(String cartId) {
-        try {
-            em.getTransaction().begin();
-            Query query = em.createQuery("DELETE FROM Utente u WHERE u.users.cartId = :cartId");
-            query.setParameter("cartId", cartId);
-            query.executeUpdate();
 
-            Users user = em.find(Users.class, cartId);
-            if (user != null) {
-                em.remove(user);
-            }
-
-            em.getTransaction().commit();
-
-        } catch (Exception e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (!isManaged) {
-                em.close();
-            }
-        }
-    }
 
     public Users findUserByCartId(String cartId) {
         try {
             return em.find(Users.class, cartId);
-        } finally {
-            if (!isManaged) {
-                em.close();
-            }
-        }
-    }
-
-    public List<Users> findAllUsers() {
-        try {
-            Query query = em.createQuery("SELECT u FROM Users u");
-            return query.getResultList();
         } finally {
             if (!isManaged) {
                 em.close();

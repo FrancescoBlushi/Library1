@@ -39,15 +39,7 @@ public class UtenteTest {
         assertEquals("testUser", retrievedUtente.getUsername());
         assertEquals("testPass", retrievedUtente.getPassword());
     }
-    @Test
-    public void testRemoveUtente() {
-        Users user = new Users("cart001", "NomeTest", "CognomeTest");
-        userDao.addUser(user);
-        Utente utente = new Utente("testUser", "testPass", user);
-        utenteDao.addUtente(utente);
-        utenteDao.removeUtente(utente);
-        assertNull(utenteDao.findUtenteUsername("testUser", "testPass"));
-    }
+
     @Test
     public void testFindUtente() {
         Users user = new Users("cart002", "NomeTest", "CognomeTest");

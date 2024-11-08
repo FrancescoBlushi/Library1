@@ -14,23 +14,33 @@ import javafx.scene.Scene;
 import org.Library.Controller.AdminController;
 import org.Library.DaoModels.*;
 import org.Library.Main;
+
+import org.Library.Pattern.Observer;
 import org.Library.models.Users;
 import org.Library.models.Utente;
 
 
 
-public class AdminView {
+public class AdminView implements Observer {
 
     private Stage stage;
     private String username;
     private Scene scena;
     private AdminController adminController;
+    private TableView<Users> tableView;
 
 
-    public AdminView(Stage stage,String username) {
+
+    public AdminView(Stage stage,String username,AdminController adminController) {
         this.stage =  stage;
         this.username = username;
+        this.adminController = adminController;
+        this.adminController.addObserver(this);
+
     }
+
+
+
      //Creazione layout sinistro della scena
     public VBox createLeft(String username){
 
@@ -134,8 +144,9 @@ public class AdminView {
 
         Button eliminaLibro = new Button("Elimina Libro");
 
-        adminController = new AdminController();
         Label messaggioLabel = new Label();
+
+        adminController = new AdminController();
 
         eliminaLibro.setOnAction(event -> {
             adminController.addBookController(isbnText,titoloText,messaggioLabel);
@@ -171,7 +182,7 @@ public class AdminView {
     //Metodo chiamata da Admin Per gestire e controllare gli utenti
     public  void controlloUtenteView(Scene scene,String titolo){
 
-        TableView<Users> tableView = new TableView<>();
+        tableView = new TableView<>();
 
         TableColumn<Users, String> cartid = new TableColumn<>("CartId");
         cartid.setMinWidth(150);
@@ -185,13 +196,11 @@ public class AdminView {
         lastname.setMinWidth(150);
         lastname.setCellValueFactory(new PropertyValueFactory<>("lastname"));
 
-        UtenteDao utenteDao = new UtenteDao();
-        List<Utente> utenti = utenteDao.findAllUtenti();
-        List<Users> users =  utenti.stream().map(Utente::getUsers).collect(Collectors.toList());
-
         tableView.getColumns().addAll(cartid,name,lastname);
-        ObservableList<Users> allBooksObservableList = FXCollections.observableArrayList(users);
-        tableView.setItems(allBooksObservableList);
+
+        update();
+
+
 
         Button eliminaUtente = new Button("Elimina Utente");
         TextField eliminaField = new TextField();
@@ -267,6 +276,18 @@ public class AdminView {
 
         return loginScene;
     }
+
+    @Override
+    public void update(){
+        UtenteDao utenteDao = new UtenteDao();
+        List<Utente> utenti = utenteDao.findAllUtenti();
+        List<Users> users =  utenti.stream().map(Utente::getUsers).collect(Collectors.toList());
+        ObservableList<Users> allUsersList = FXCollections.observableArrayList(users);
+        tableView.setItems(allUsersList);
+
+    }
+
+
 
 
 

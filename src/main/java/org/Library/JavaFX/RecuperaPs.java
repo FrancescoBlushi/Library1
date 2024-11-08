@@ -12,9 +12,10 @@ import javafx.stage.Stage;
 import org.Library.Controller.PasswordController;
 import org.Library.DaoModels.UserDao;
 import org.Library.DaoModels.UtenteDao;
+import org.Library.Pattern.Observable;
 
 
-public class RecuperaPs {
+public class RecuperaPs extends Observable {
 
 
     public RecuperaPs() {

@@ -62,16 +62,6 @@ public class BookTest {
         assertEquals(1, listBooks.size());
     }
 
-    @Test
-    public void testRemoveBookByTitolo(){
-        Books book =  new Books("978-00099910107","Ernest","Arms","Storico","Inglese",1,"prima");
-        bookDao.addBook(book);
-
-        bookDao.removeBooksByTitle("Arms");
-        Books tryBook = bookDao.findBook("Arms");
-        assertNull(tryBook);
-
-    }
 
     @Test
     public void testBooleanFindIsbn(){

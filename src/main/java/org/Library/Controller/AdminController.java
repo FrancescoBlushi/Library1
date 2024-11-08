@@ -11,13 +11,13 @@ import org.Library.DaoModels.UserDao;
 import org.Library.DaoModels.UtenteDao;
 import org.Library.JavaFX.MessageView;
 import org.Library.models.Books;
-import org.Library.models.Loans;
 import org.Library.models.Users;
 import org.Library.models.Utente;
 import java.util.List;
+import org.Library.Pattern.*;
 import java.util.stream.Collectors;
 
-public class AdminController {
+public class AdminController extends Observable {
 
     private BookDao bookDao;
     private Books book;
@@ -28,6 +28,8 @@ public class AdminController {
 
 
     public AdminController () {}
+
+
 
     public void addBookController(TextField isbnText, TextField titoloText, Label messaggioLabel2) {
         bookDao = new BookDao();
@@ -42,6 +44,10 @@ public class AdminController {
 
         }else{
             MessageView.mostraMessaggio(messaggioLabel2,"Libro non trovato","-fx-text-fill: #26ff00; -fx-font-scale: white");
+        }
+
+        synchronized (this) {
+            notify();
         }
     }
 
@@ -70,6 +76,10 @@ public class AdminController {
             MessageView.mostraMessaggio(messaggioLabel,"Libro aggiunto correttamente","-fx-text-fill: #ff1500; -fx-font-scale: white");
         }else
             MessageView.mostraMessaggio(messaggioLabel,"Tutti i campi devono essere convalidati.","-fx-background-color: #a63845; -fx-text-fill: white;");
+
+        synchronized (this) {
+            notify();
+        }
     }
 
     public void clientSearch(String searchTerm, TableView<Users> tableView) {
@@ -107,6 +117,9 @@ public class AdminController {
             MessageView.mostraMessaggio(messaggio,"Utente eliminato correttamente","-fx-text-fill: #26ff00; -fx-font-scale: white");
         }else{
             MessageView.mostraMessaggio(messaggio,"Utente non trovato","-fx-text-fill: #ff1500; -fx-font-scale: white");
+        }
+        synchronized (this) {
+            notify();
         }
     }
 }

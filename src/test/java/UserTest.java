@@ -31,15 +31,6 @@ public class UserTest {
         assertEquals("CognomeTest", retrievedUser.getLastname());
     }
 
-    @Test
-    public void testRemoveUserByCartId() {
-        Users user = new Users("cart", "NomeTest", "CognomeTest");
-        userDao.addUser(user);
-
-        userDao.removeUserByCartId("cart");
-        Users retrievedUser = userDao.findUserByCartId("cart");
-        assertNull(retrievedUser);
-    }
 
     @Test
     public void testFindUserByCartId() {
@@ -52,17 +43,6 @@ public class UserTest {
         assertEquals("CognomeTest", retrievedUser.getLastname());
     }
 
-    @Test
-    public void testFindAllUsers() {
-        Users user1 = new Users("cart123", "NomeTest1", "CognomeTest1");
-        Users user2 = new Users("cart456", "NomeTest2", "CognomeTest2");
-
-        userDao.addUser(user1);
-        userDao.addUser(user2);
-
-        List<Users> allUsers = userDao.findAllUsers();
-        assertTrue(allUsers.size() >= 2);
-    }
 
     @Test
     public void testControllUser() {
