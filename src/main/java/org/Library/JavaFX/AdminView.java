@@ -149,12 +149,12 @@ public class AdminView implements Observer {
         adminController = new AdminController();
 
         eliminaLibro.setOnAction(event -> {
-            adminController.addBookController(isbnText,titoloText,messaggioLabel);
+            adminController.removeBook(isbnText,titoloText,messaggioLabel);
         });
 
         Button aggiunigiLibro = new Button("Aggiungi Libro");
         aggiunigiLibro.setOnAction(event -> {
-            adminController.removeBookController(isbnText,autoreText,titoloText,generoText,linguaText,edizioneText,disponibiliText,messaggioLabel);
+            adminController.addBook(isbnText,autoreText,titoloText,generoText,linguaText,edizioneText,disponibiliText,messaggioLabel);
 
         });
 

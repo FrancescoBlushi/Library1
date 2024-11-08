@@ -81,8 +81,8 @@ public class UtenteView {
         //Cronologia Libri Action
         cronologiaButton.setOnAction(event -> {
             Scene scene = createStage(username, cartId);
-            LoanView loanView = new LoanView(primaryStage, scene);
-            loanView.createLoan(cartId);
+            LoanView loanView = new LoanView(primaryStage, scene,cartId,new UtenteController());
+            loanView.createLoan();
 
         });
 

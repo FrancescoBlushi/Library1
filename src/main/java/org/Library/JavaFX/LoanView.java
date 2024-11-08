@@ -7,11 +7,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
+import org.Library.Controller.UtenteController;
 import org.Library.DaoModels.BookDao;
 import org.Library.DaoModels.ConnectionDB;
 import org.Library.DaoModels.LoansDao;
 import org.Library.DaoModels.UserDao;
 import org.Library.Dto.LoanBook;
+import org.Library.Pattern.Observer;
 import org.Library.models.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,11 +31,14 @@ import java.util.List;
 
 
 //Classe che permette agli utenti di visualizzare i libri in prestito
-public class LoanView {
+public class LoanView implements Observer {
 
-    public LoanView(Stage stage,Scene scene) {
+    public LoanView(Stage stage,Scene scene,String cartId,UtenteController utenteController) {
         this.stage = stage;
         this.loginScene = scene;
+        this.cartId =cartId;
+        this.utenteController = utenteController;
+        utenteController.addObserver(this);
     }
 
     private Stage stage;
@@ -42,6 +47,8 @@ public class LoanView {
     private LoansDao loansDao;
     private List<LoanBook> loansList;
     TableView<LoanBook> tableView;
+    private String cartId;
+    private UtenteController utenteController;
 
    /* public TableView<Loans> loansTView(String cart) {
 
@@ -83,7 +90,7 @@ public class LoanView {
 
 
     }*/
-    public TableView<LoanBook> loansTView1(String cart) {
+    public TableView<LoanBook> loansTView1() {
 
         loansDao = new LoansDao();
         tableView = new TableView<>();
@@ -118,20 +125,25 @@ public class LoanView {
 
 
         tableView.getColumns().addAll(cartId, isbn,title,autore, loanDate, dueDate, returnDate);
+        update();
 
-        loansList = loansDao.getLibriLoan(cart);
 
-        ObservableList<LoanBook> observableList = FXCollections.observableArrayList(loansList);
-        tableView.setItems(observableList);
 
         return tableView;
 
 
     }
+    @Override
+    public void update(){
+        loansList = loansDao.getLibriLoan(cartId);
+        ObservableList<LoanBook> observableList = FXCollections.observableArrayList(loansList);
+        tableView.setItems(observableList);
+
+    }
 
 
 
-    public VBox CreatLeft(String id){
+    public VBox CreatLeft(){
 
         VBox leftBox = new VBox();
         leftBox.setPadding(new Insets(10));
@@ -142,7 +154,7 @@ public class LoanView {
         cronologia.setStyle("-fx-font-weight: bold;");
 
         userDao = new UserDao();
-        Users user = userDao.findUserByCartId(id);
+        Users user = userDao.findUserByCartId(cartId);
         Label name = new Label(user.getName());
         name.setStyle("-fx-font-weight: bold;");
 
@@ -167,10 +179,10 @@ public class LoanView {
     }
 
 
-    public void createLoan(String id){
+    public void createLoan(){
 
-        TableView<LoanBook> tableView = loansTView1(id);
-        VBox leftBox = CreatLeft(id);
+        TableView<LoanBook> tableView = loansTView1();
+        VBox leftBox = CreatLeft();
 
         BorderPane mainLayout = new BorderPane();
         mainLayout.setLeft(leftBox);

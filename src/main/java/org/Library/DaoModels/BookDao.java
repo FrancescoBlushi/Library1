@@ -1,6 +1,7 @@
 package org.Library.DaoModels;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.Library.Pattern.BookDaoInterface;
 import org.Library.models.*;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -8,7 +9,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 
-public class BookDao {
+public class BookDao implements BookDaoInterface {
 
     private EntityManager em;
     private Boolean isManaged;
@@ -23,6 +24,7 @@ public class BookDao {
         this.em = ConnectionDB.getInstance().getEntity();
     }
 
+    @Override
     public void addBook(Books book) {
         if (!isManaged) {               // Apertura del collegamento
             em = ConnectionDB.getInstance().getEntity();
@@ -38,7 +40,7 @@ public class BookDao {
 
         }
     }
-
+    @Override
     public void removeBook(String isbn) {
         if (!isManaged) {               // Apertura del collegamento
             em = ConnectionDB.getInstance().getEntity();
@@ -58,7 +60,7 @@ public class BookDao {
         }
     }
 
-
+    @Override
     public Books findBookByIsbn(String isbn) {
         if (!isManaged) {               // Apertura del collegamento
             em = ConnectionDB.getInstance().getEntity();
@@ -77,6 +79,7 @@ public class BookDao {
     }
 
     // Metodo che permette di disattivare caseSensitive e di avere ricerca anche parziale
+
     public List<Books> findBooksByTitle(String title) {
         if (!isManaged) {
             em = ConnectionDB.getInstance().getEntity();
@@ -92,6 +95,7 @@ public class BookDao {
             }
         }
     }
+
 
     public Books findBook(String titolo) {
         if (!isManaged) {
@@ -142,6 +146,7 @@ public class BookDao {
         }
     }
 
+    @Override
     public boolean cambiaDisponibilita(String isbn, int nuoviDisponibili) {
         if (!isManaged) {               // Apertura del collegamento
             em = ConnectionDB.getInstance().getEntity();

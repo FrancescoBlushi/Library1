@@ -5,19 +5,26 @@ import org.Library.DaoModels.BookDao;
 import org.Library.DaoModels.LoansDao;
 import org.Library.DaoModels.UserDao;
 import org.Library.JavaFX.MessageView;
+import org.Library.Pattern.LoanDaoInterface;
+import org.Library.Pattern.Observable;
+import org.Library.Pattern.Observer;
+import org.Library.Proxy.BookDaoProxy;
+import org.Library.Proxy.LoanDaoProxy;
 import org.Library.models.Books;
 import org.Library.models.Loans;
 import org.Library.models.Users;
 
 import java.time.LocalDate;
 
-public class UtenteController {
+public class UtenteController extends Observable {
 
     private BookDao bookDao;
+    private BookDaoProxy bookDaoProxy;
     private Books books;
     private UserDao userDao;
     private Users user;
     private LoansDao loansDao;
+    private LoanDaoProxy loansDaoProxy;
     private Loans loan;
 
     public UtenteController() {}
@@ -48,12 +55,13 @@ public class UtenteController {
             MessageView.mostraMessaggio(message,"Libro non disponibile perche gia in prestito","-fx-background-color: #ff1500; -fx-text-fill: white");
 
         } else {
-             loan = new Loans(currentDate, dueDate, user, books);
+            loan = new Loans(currentDate, dueDate, user, books);
             disponibili = disponibili - 1;
-            loansDao= new LoansDao();
-            loansDao.addLoan(loan);
-            bookDao = new BookDao();
-            bookDao.cambiaDisponibilita(isbn, disponibili);
+            loansDaoProxy= new LoanDaoProxy(new LoansDao(),"user");
+            loansDaoProxy.addLoan(loan);
+            bookDaoProxy = new BookDaoProxy(new BookDao(),"admin");
+            bookDaoProxy.cambiaDisponibilita(isbn,disponibili);
+
 
             MessageView.mostraMessaggio(message, "Prestito andato a buon fine", "-fx-background-color: #26ff00; -fx-text-fill: white");
         }
@@ -67,15 +75,16 @@ public class UtenteController {
         loansDao = new LoansDao();
         if (loansDao.setDueDate(isbn, cartID, currentDate)) {
             System.out.println(isbn);
-            bookDao = new BookDao();
-            books = bookDao.findBookByIsbn(isbn);
-            System.out.println(books.getTitle());
+            bookDaoProxy = new BookDaoProxy(new BookDao(),"user");
+            books = bookDaoProxy.findBookByIsbn(isbn);
             int disponibili = books.getDisponibili() + 1;
-            bookDao.cambiaDisponibilita(isbn, disponibili);
+            bookDaoProxy.cambiaDisponibilita(isbn, disponibili);
             return true;
         } else {
             return false;
         }
     }
+
+
 
 }

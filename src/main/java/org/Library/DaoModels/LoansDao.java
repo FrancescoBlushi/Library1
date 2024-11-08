@@ -1,11 +1,12 @@
 package org.Library.DaoModels;
 import org.Library.Dto.LoanBook;
+import org.Library.Pattern.LoanDaoInterface;
 import org.Library.models.*;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
-public class LoansDao {
+public class LoansDao implements LoanDaoInterface {
 
     private EntityManager em;
     private Boolean isManaged;
@@ -21,6 +22,7 @@ public class LoansDao {
         this.em = ConnectionDB.getInstance().getEntity();
     }
 
+    @Override
     public void addLoan(Loans loan) {
         try {
             em.getTransaction().begin();
@@ -33,21 +35,10 @@ public class LoansDao {
         }
     }
 
+    //usata per i test
     public List<Loans> findAllLoans() {
         try {
             Query query = em.createQuery("SELECT l FROM Loans l");
-            return query.getResultList();
-        } finally {
-            if (!isManaged) {
-                em.close();
-            }
-        }
-    }
-
-    public List<Loans> loansByCartId(String cartId) {
-        try {
-            Query query = em.createQuery("SELECT l FROM Loans l WHERE l.user.cartId = :cartId");
-            query.setParameter("cartId", cartId);
             return query.getResultList();
         } finally {
             if (!isManaged) {
@@ -77,6 +68,7 @@ public class LoansDao {
         }
     }
 
+
     public List<Loans> findLoan(String isbn) {
         try {
             Query query = em.createQuery("SELECT l FROM Loans l WHERE l.book.isbn = :isbn");
@@ -87,6 +79,27 @@ public class LoansDao {
                 em.close();
             }
         }
+    }
+    public boolean removeLoan(String isbn) {
+        EntityManager  em1=ConnectionDB.getInstance().getEntity();
+
+        if(!controlReturnDate(isbn)) {
+            try{
+                em1.getTransaction().begin();
+                Query query = em1.createQuery("DELETE FROM Loans l WHERE l.book.isbn = :isbn");
+                query.setParameter("isbn", isbn);
+                query.executeUpdate();
+                em1.getTransaction().commit();
+                return true;
+            }finally {
+                if (!isManaged) {
+                    em1.close();
+                }
+            }
+        }else{
+            return false;
+        }
+
     }
 
     public Boolean setDueDate(String isbn, String cartID, LocalDate returnDate) {
@@ -122,7 +135,7 @@ public class LoansDao {
 
     }
 
-    public Boolean controlReturnDate(String isbn) {
+    public boolean controlReturnDate(String isbn) {
         boolean control = false;
         List<Loans> loans = findLoan(isbn);
         for (Loans loan : loans) {
@@ -135,10 +148,9 @@ public class LoansDao {
 
     }
 
-
-
     //Metodo che permette di eliminare un Utente tenendo conto delle loro chiavi primary ed eliminando in ordine prima utente, poi
     // i Loans e in fine users.
+    @Override
     public void removeUserAndAssociations(String cartId) {
         if (!isManaged) {
             em = ConnectionDB.getInstance().getEntity();
@@ -190,6 +202,8 @@ public class LoansDao {
             }
         }
     }
+
+
 
 
 }
