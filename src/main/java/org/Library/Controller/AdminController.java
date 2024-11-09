@@ -24,7 +24,7 @@ public class AdminController extends Observable {
     private UtenteDao utenteDao;
     private List<Users> users;
     private BookDaoInterface adminProxy;
-    private LoanDaoProxy loanProxy;
+    private LoanDaoInterface loanProxy;
 
 
     public AdminController () {}

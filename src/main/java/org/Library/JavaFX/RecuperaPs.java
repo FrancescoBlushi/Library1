@@ -18,9 +18,6 @@ import org.Library.Pattern.Observable;
 public class RecuperaPs extends Observable {
 
 
-    public RecuperaPs() {
-    }
-
     private Scene registerScene;
     private Stage stage;
     private PasswordController passwordController;
